@@ -33,15 +33,15 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ onSelect, disabled
       <button
         onClick={() => onSelect('TRUST')}
         disabled={disabled}
-        className="btn-trust py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1.5 font-extrabold shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50 group relative overflow-hidden cursor-pointer"
+        className="btn-action-trust py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1 font-display font-bold shadow-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/50 group relative overflow-hidden cursor-pointer"
         aria-label="Trust this information (Keyboard shortcut: 1)"
       >
         <div className="flex items-center space-x-2 text-base sm:text-lg">
-          <CheckCircle2 className="w-5 h-5 group-hover:scale-110 transition-transform text-emerald-600" />
+          <CheckCircle2 className="w-5 h-5 group-hover:scale-110 transition-transform text-emerald-400" />
           <span>TRUST</span>
         </div>
-        <span className="text-[11px] font-medium opacity-85 font-mono text-emerald-800">
-          Accept as Reliable &bull; <kbd className="bg-emerald-100/90 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">1</kbd>
+        <span className="text-[10px] font-mono text-emerald-300/80">
+          Accept as Reliable &bull; <kbd className="bg-emerald-950/80 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/40">1</kbd>
         </span>
       </button>
 
@@ -49,15 +49,15 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ onSelect, disabled
       <button
         onClick={() => onSelect('VERIFY')}
         disabled={disabled}
-        className="btn-verify py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1.5 font-extrabold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/50 group relative overflow-hidden cursor-pointer"
+        className="btn-action-verify py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1 font-display font-bold shadow-xs focus:outline-none focus:ring-2 focus:ring-amber-500/50 group relative overflow-hidden cursor-pointer"
         aria-label="Verify this information (Keyboard shortcut: 2)"
       >
         <div className="flex items-center space-x-2 text-base sm:text-lg">
-          <Search className="w-5 h-5 group-hover:scale-110 transition-transform text-indigo-600" />
+          <Search className="w-5 h-5 group-hover:scale-110 transition-transform text-amber-400" />
           <span>VERIFY</span>
         </div>
-        <span className="text-[11px] font-medium opacity-85 font-mono text-indigo-800">
-          Check 6 MIL Checks &bull; <kbd className="bg-indigo-100/90 text-indigo-900 px-1.5 py-0.5 rounded border border-indigo-300">2</kbd>
+        <span className="text-[10px] font-mono text-amber-300/80">
+          6-Point Audit &bull; <kbd className="bg-amber-950/80 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/40">2</kbd>
         </span>
       </button>
 
@@ -65,15 +65,15 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ onSelect, disabled
       <button
         onClick={() => onSelect('REJECT')}
         disabled={disabled}
-        className="btn-reject py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1.5 font-extrabold shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-400/50 group relative overflow-hidden cursor-pointer"
+        className="btn-action-reject py-4 px-5 rounded-2xl flex flex-col items-center justify-center space-y-1 font-display font-bold shadow-xs focus:outline-none focus:ring-2 focus:ring-rose-500/50 group relative overflow-hidden cursor-pointer"
         aria-label="Reject this information (Keyboard shortcut: 3)"
       >
         <div className="flex items-center space-x-2 text-base sm:text-lg">
-          <XCircle className="w-5 h-5 group-hover:scale-110 transition-transform text-rose-600" />
+          <XCircle className="w-5 h-5 group-hover:scale-110 transition-transform text-rose-400" />
           <span>REJECT</span>
         </div>
-        <span className="text-[11px] font-medium opacity-85 font-mono text-rose-800">
-          Flag Misinformation &bull; <kbd className="bg-rose-100/90 text-rose-900 px-1.5 py-0.5 rounded border border-rose-300">3</kbd>
+        <span className="text-[10px] font-mono text-rose-300/80">
+          Flag Misleading &bull; <kbd className="bg-rose-950/80 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/40">3</kbd>
         </span>
       </button>
 

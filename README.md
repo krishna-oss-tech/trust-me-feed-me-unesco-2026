@@ -168,15 +168,17 @@ $$\text{AccuracyScore} = \left(\frac{\text{CorrectDecisions}}{\text{TotalScenari
 
 ---
 
-## 🎨 Visual Design System (Light Youth-Tech)
+## 🎨 Visual Design System (Dark Editorial Laboratory)
 
-- **Background**: Soft Warm White (`#F8FAFC`)
-- **Primary Brand**: Modern Youth Blue (`#5B8DEF`)
-- **Secondary**: Soft Lavender (`#8B7CF6`)
-- **Accent**: Fresh Mint (`#63C7B2`)
-- **Highlight**: Soft Coral / Peach (`#FFB4A2`)
-- **Text**: Dark Navy (`#172033`) for AAA contrast & readability
-- **Cards**: Pure White (`#FFFFFF`) with `rounded-3xl` radii and soft ambient shadows
+- **Primary Canvas**: Deep Obsidian Navy (`#090D16`)
+- **Elevated Surfaces**: Charcoal Slate (`#0F1523` / `#131B2E` with 1px `border-white/[0.08]`)
+- **Typography**: Space Grotesk (Display Headlines) + Inter (Interface & Body)
+- **Primary Accent**: Electric Cyan (`#00F0FF`) & Youth Blue (`#3B82F6`)
+- **Semantic Actions**:
+  - **TRUST**: Emerald (`#10B981` / `#34D399`)
+  - **VERIFY**: Amber (`#F59E0B` / `#FBBF24`)
+  - **REJECT**: Crimson (`#EF4444` / `#F87171`)
+- **Atmosphere**: Restrained depth, subtle ambient backlights, zero rainbow gradients, accessible AAA contrast
 
 ---
 
