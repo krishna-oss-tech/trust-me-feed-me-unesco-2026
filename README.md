@@ -8,6 +8,7 @@
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-13.1-EA4C89?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 [![Vercel Ready](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
 <p align="center">
@@ -196,11 +197,14 @@ unesco/
 │   │   ├── final/           # FinalReveal.tsx, ShareModal.tsx
 │   │   ├── profile/         # ProfileCard.tsx, RadarChart.tsx
 │   │   ├── ActionButtons.tsx# Interactive Trust/Verify/Reject buttons
+│   │   ├── CategoryMarquee.tsx # Animated topic showcase marquee
 │   │   ├── Footer.tsx       # UNESCO disclaimers & keyboard shortcuts
+│   │   ├── HeroLiveDemo.tsx # Live cyclical simulation preview
 │   │   ├── LiveClaimModal.tsx # Real-time Tavily-backed claim checker UI
 │   │   ├── Navbar.tsx       # Mode toggles, Live check button & brand header
 │   │   ├── ReasonModal.tsx  # "Why did you choose this?" reflection
 │   │   ├── ScenarioCard.tsx # Rich scenario card with media & metrics
+│   │   ├── ScrambleText.tsx # Kinetic text glyph decoding effect
 │   │   └── VerificationPanel.tsx # 6-Point MIL audit interactive tool
 │   ├── context/
 │   │   └── GameContext.tsx  # Global state, persistence & flow manager

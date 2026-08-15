@@ -1,192 +1,196 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useGame } from '../context/GameContext';
-import { ShieldCheck, HelpCircle, Search, Brain, ArrowRight, Zap, Play, Sparkles, CheckCircle2, Bot, Layers, TrendingUp, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Zap, Play, Bot, Search, Sparkles } from 'lucide-react';
+import { ScrambleText } from '../components/ScrambleText';
+import { HeroLiveDemo } from '../components/HeroLiveDemo';
+import { CategoryMarquee } from '../components/CategoryMarquee';
+
+const FLOW_STEPS = [
+  {
+    tag: '01 · ENCOUNTER',
+    color: '#00F0FF',
+    accentBg: 'rgba(0,240,255,0.08)',
+    accentBorder: 'rgba(0,240,255,0.25)',
+    icon: Bot,
+    title: 'Live information streams',
+    body: 'Evaluate synthetic AI answers, viral claims, misleading charts, and recycled news the way you actually encounter them.',
+  },
+  {
+    tag: '02 · EVALUATE',
+    color: '#3B82F6',
+    accentBg: 'rgba(59,130,246,0.08)',
+    accentBorder: 'rgba(59,130,246,0.25)',
+    icon: Search,
+    title: 'The 6-point MIL audit',
+    body: 'Source, date, evidence, context, media authenticity, consensus. Confidence is not evidence.',
+  },
+  {
+    tag: '03 · SIMULATE',
+    color: '#10B981',
+    accentBg: 'rgba(16,185,129,0.08)',
+    accentBorder: 'rgba(16,185,129,0.25)',
+    icon: Sparkles,
+    title: 'Your feed, built by you',
+    body: 'Watch your choices compound into an algorithmic tendency profile and a simulated feed of your own making.',
+  },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
 
 export const LandingPage: React.FC = () => {
   const { setStep, isDemoMode, setIsDemoMode } = useGame();
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-16 sm:space-y-24 py-10 sm:py-20 px-4 animate-fade-in relative z-10">
-      
-      {/* Hero Section */}
-      <div className="text-center space-y-6 max-w-3xl mx-auto">
-        
-        {/* UNESCO Hackathon Pill */}
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold shadow-xs">
-          <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-          <span>UNESCO YOUTH HACKATHON 2026 &bull; AI & MIL</span>
+    <div className="w-full space-y-20 sm:space-y-28 pt-8 sm:pt-16 pb-20 px-4 sm:px-6 animate-fade-in relative z-10">
+
+      {/* ============ HERO — asymmetric, two columns ============ */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-8 items-center">
+
+        <div className="text-center lg:text-left space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span>UNESCO YOUTH HACKATHON 2026 &bull; AI &amp; MIL</span>
+          </motion.div>
+
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-white leading-[0.95]">
+            TRUST ME,
+            <br />
+            <ScrambleText
+              as="span"
+              text="FEED ME"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500"
+            />
+          </h1>
+
+          <p className="text-lg sm:text-xl font-display font-bold text-slate-200 tracking-tight">
+            &ldquo;What you trust shapes what you see.&rdquo;
+          </p>
+
+          <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            An interactive Media and Information Literacy laboratory. Question synthetic AI
+            answers, evaluate viral claims, and discover how your choices construct your own
+            information environment.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+            <button
+              onClick={() => setStep('challenge')}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:brightness-110 active:scale-[0.97] text-slate-950 font-display font-bold text-sm sm:text-base shadow-xl shadow-cyan-500/20 flex items-center justify-center space-x-2 transition-all cursor-pointer"
+            >
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>START THE EXPERIENCE</span>
+            </button>
+
+            <button
+              onClick={() => setStep('how_it_works')}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 active:scale-[0.97] border border-white/10 text-slate-200 font-display font-semibold text-sm sm:text-base flex items-center justify-center space-x-2 transition-all cursor-pointer group"
+            >
+              <span>HOW IT WORKS</span>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
+
+          <div className="pt-1 flex justify-center lg:justify-start">
+            <button
+              onClick={() => setIsDemoMode(!isDemoMode)}
+              className={`inline-flex items-center space-x-2 text-xs font-mono px-3.5 py-1.5 rounded-full border transition-all cursor-pointer ${
+                isDemoMode
+                  ? 'bg-amber-950/50 text-amber-300 border-amber-500/40'
+                  : 'bg-slate-900/60 text-slate-400 border-white/[0.08] hover:border-white/20 hover:text-slate-300'
+              }`}
+            >
+              <Zap className={`w-3.5 h-3.5 ${isDemoMode ? 'text-amber-400 fill-amber-400' : 'text-slate-500'}`} />
+              <span>
+                {isDemoMode
+                  ? 'Demo Mode Active: 5 Curated Scenarios (~2 mins)'
+                  : 'Judges Shortcut: Enable 5-Scenario Fast Demo'}
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Display Title */}
-        <h1 className="text-5xl sm:text-7xl font-display font-black tracking-tight text-white leading-none">
-          TRUST ME,<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400">
-            FEED ME
-          </span>
-        </h1>
+        {/* Live product demo instead of a static illustration */}
+        <HeroLiveDemo />
+      </div>
 
-        {/* Tagline */}
-        <p className="text-xl sm:text-2xl font-display font-bold text-slate-200 tracking-tight">
-          &ldquo;What you trust shapes what you see.&rdquo;
+      {/* ============ CATEGORY MARQUEE ============ */}
+      <div className="max-w-6xl mx-auto">
+        <p className="text-center text-[11px] font-mono uppercase tracking-[0.2em] text-slate-600 mb-4">
+          15 scenarios across the information ecosystem
         </p>
+        <CategoryMarquee />
+      </div>
 
-        {/* Supporting Editorial Paragraph */}
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-          An interactive Media and Information Literacy (MIL) laboratory. Question synthetic AI answers, evaluate viral claims, and discover how your choices construct your information environment.
+      {/* ============ UNIFIED FLOW: single narrative, not a duplicated grid ============ */}
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={{ show: { transition: { staggerChildren: 0.12 } } }}
+        className="max-w-6xl mx-auto"
+      >
+        <motion.div variants={fadeUp} className="text-center space-y-2 mb-10">
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-white">
+            How your decisions shape algorithmic reality
+          </h2>
+          <p className="text-slate-500 text-sm max-w-lg mx-auto">
+            Three connected stages. Each choice you make feeds directly into the next.
+          </p>
+        </motion.div>
+
+        <div className="relative">
+          {/* connecting line (desktop only) */}
+          <div className="hidden md:block absolute top-[38px] left-[16.5%] right-[16.5%] h-px bg-gradient-to-r from-cyan-500/40 via-blue-500/40 to-emerald-500/40" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
+            {FLOW_STEPS.map((step) => (
+              <motion.div key={step.tag} variants={fadeUp} className="relative">
+                <div
+                  className="w-[76px] h-[76px] rounded-2xl flex items-center justify-center mx-auto md:mx-0 mb-5 relative z-10 border"
+                  style={{ backgroundColor: step.accentBg, borderColor: step.accentBorder }}
+                >
+                  <step.icon className="w-7 h-7" style={{ color: step.color }} />
+                </div>
+                <div
+                  className="text-[10px] font-mono font-bold tracking-wider mb-2 text-center md:text-left"
+                  style={{ color: step.color }}
+                >
+                  {step.tag}
+                </div>
+                <h3 className="font-display font-bold text-white text-base sm:text-lg mb-1.5 text-center md:text-left">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-slate-400 leading-relaxed text-center md:text-left">
+                  {step.body}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ============ CLOSING LINE ============ */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="max-w-2xl mx-auto text-center border-t border-white/[0.06] pt-10"
+      >
+        <p className="text-slate-500 text-sm">
+          No mandatory login. No real data harvesting. Just a mirror held up to your own
+          information habits &mdash; and a chance to change them before the algorithm decides for you.
         </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
-          <button
-            onClick={() => setStep('challenge')}
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-display font-bold text-sm sm:text-base shadow-xl shadow-cyan-500/20 flex items-center justify-center space-x-2 transition-all hover:scale-105 cursor-pointer"
-          >
-            <Play className="w-4 h-4 fill-slate-950" />
-            <span>START THE EXPERIENCE</span>
-          </button>
-
-          <button
-            onClick={() => setStep('how_it_works')}
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-200 font-display font-semibold text-sm sm:text-base shadow-sm flex items-center justify-center space-x-2 transition-all hover:scale-105 cursor-pointer"
-          >
-            <span>HOW IT WORKS</span>
-            <ArrowRight className="w-4 h-4 text-slate-400" />
-          </button>
-        </div>
-
-        {/* Fast Demo Mode Shortcut Pill for Judges */}
-        <div className="pt-1">
-          <button
-            onClick={() => setIsDemoMode(!isDemoMode)}
-            className={`inline-flex items-center space-x-2 text-xs font-mono px-3.5 py-1.5 rounded-full border transition-all cursor-pointer ${
-              isDemoMode
-                ? 'bg-amber-950/50 text-amber-300 border-amber-500/40'
-                : 'bg-slate-900/60 text-slate-400 border-white/[0.08] hover:border-white/20 hover:text-slate-300'
-            }`}
-          >
-            <Zap className={`w-3.5 h-3.5 ${isDemoMode ? 'text-amber-400 fill-amber-400' : 'text-slate-500'}`} />
-            <span>
-              {isDemoMode
-                ? 'Demo Mode Active: 5 Curated Scenarios (~2 mins)'
-                : 'Judges Shortcut: Enable 5-Scenario Fast Demo'}
-            </span>
-          </button>
-        </div>
-
-      </div>
-
-      {/* Visual Information System Convergence Architecture */}
-      <div className="surface-elevated rounded-3xl p-6 sm:p-10 border border-white/[0.08] relative overflow-hidden bg-gradient-to-b from-[#0F1523] via-[#0B0F19] to-[#090D16]">
-        
-        {/* Glow behind convergence */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 space-y-8">
-          <div className="text-center space-y-1.5">
-            <div className="inline-flex items-center space-x-1.5 text-xs font-mono font-semibold text-cyan-400 uppercase tracking-wider bg-cyan-950/40 px-3 py-1 rounded-full border border-cyan-500/20">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Interactive Information Cycle</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-display font-bold text-white">
-              How Decisions Shape Algorithmic Realities
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            
-            {/* Step 1: Encounter */}
-            <div className="surface-card p-5 rounded-2xl border border-white/[0.06] space-y-3 relative group hover:border-cyan-500/30 transition-all">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-cyan-400 bg-cyan-950/60 border border-cyan-500/20 px-2 py-0.5 rounded">
-                  01 &bull; ENCOUNTER
-                </span>
-                <Bot className="w-4 h-4 text-cyan-400" />
-              </div>
-              <h4 className="font-display font-bold text-sm text-slate-100">Live Information Streams</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Evaluate realistic synthetic AI responses, viral claims, misleading charts, and recycled news.
-              </p>
-              <div className="pt-1 flex gap-1.5 text-[10px] font-mono font-bold">
-                <span className="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">Trust</span>
-                <span className="px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-500/30">Verify</span>
-                <span className="px-2 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-500/30">Reject</span>
-              </div>
-            </div>
-
-            {/* Step 2: Evaluate */}
-            <div className="surface-card p-5 rounded-2xl border border-white/[0.06] space-y-3 relative group hover:border-blue-500/30 transition-all">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-blue-400 bg-blue-950/60 border border-blue-500/20 px-2 py-0.5 rounded">
-                  02 &bull; EVALUATE
-                </span>
-                <Search className="w-4 h-4 text-blue-400" />
-              </div>
-              <h4 className="font-display font-bold text-sm text-slate-100">6-Point MIL Audit</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Investigate source accountability, timestamps, primary evidence, missing context, and consensus.
-              </p>
-              <div className="pt-1 flex items-center text-[10px] font-mono text-blue-300">
-                <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-blue-400" />
-                <span>Confidence is not evidence</span>
-              </div>
-            </div>
-
-            {/* Step 3: Simulate */}
-            <div className="surface-card p-5 rounded-2xl border border-white/[0.06] space-y-3 relative group hover:border-emerald-500/30 transition-all">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-500/20 px-2 py-0.5 rounded">
-                  03 &bull; SIMULATE
-                </span>
-                <Sparkles className="w-4 h-4 text-emerald-400" />
-              </div>
-              <h4 className="font-display font-bold text-sm text-slate-100">Simulated Feed Transformation</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Experience how your behavioral choices feed into algorithmic tendencies to construct your future feed.
-              </p>
-              <div className="pt-1 text-[10px] font-mono text-emerald-400">
-                <span>Personalized Information Profile</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-      {/* 3 Core MIL Principles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-2.5 hover:border-cyan-500/30 transition-all">
-          <div className="w-10 h-10 rounded-xl bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-xs">
-            <HelpCircle className="w-5 h-5" />
-          </div>
-          <h3 className="text-base font-display font-bold text-white tracking-wide">01 QUESTION</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Resist fast trust. Understand the psychological hooks behind articulate AI answers, high like counts, and emotional outrage.
-          </p>
-        </div>
-
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-2.5 hover:border-blue-500/30 transition-all">
-          <div className="w-10 h-10 rounded-xl bg-blue-950/50 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-xs">
-            <Search className="w-5 h-5" />
-          </div>
-          <h3 className="text-base font-display font-bold text-white tracking-wide">02 VERIFY</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Perform the UNESCO 6-point verification audit: Source, Date, Evidence, Context, Media Authenticity, and Institutional Consensus.
-          </p>
-        </div>
-
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-2.5 hover:border-emerald-500/30 transition-all">
-          <div className="w-10 h-10 rounded-xl bg-emerald-950/50 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-xs">
-            <Brain className="w-5 h-5" />
-          </div>
-          <h3 className="text-base font-display font-bold text-white tracking-wide">03 REFLECT</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            See your complete behavioural profile chart and see how your interactions actively fuel the algorithmic feed you receive.
-          </p>
-        </div>
-
-      </div>
+      </motion.div>
 
     </div>
   );
