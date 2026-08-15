@@ -1,63 +1,65 @@
 import type { AIServiceResponse, Scenario } from '../types';
 
-
 /**
- * AI Service Abstraction Layer
+ * Client-Side AI Service Layer
  * 
- * Provides dynamic AI insights if an API key is provided via env variables.
- * Automatically falls back to local pre-written explanations if API key is absent,
- * network is offline, or API request fails.
+ * Securely proxies AI analysis requests through our serverless endpoint (/api/ai-analysis).
+ * No secret API keys are ever stored or used client-side.
+ * 
+ * Automatically falls back to high-quality pre-written MIL scenario explanations if:
+ * - Server AI key is not configured
+ * - Running offline or in local environment without serverless backend
+ * - Network is unavailable or request times out
+ * - Server returns an error
  */
 export async function getAIScenarioAnalysis(scenario: Scenario): Promise<AIServiceResponse> {
-  const apiKey = import.meta.env.VITE_AI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY;
-
-  if (!apiKey) {
-    return getFallbackAnalysis(scenario);
-  }
-
   try {
-    // Optional API Integration Call (e.g. OpenAI / Gemini compatibility endpoint)
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+    const response = await fetch('/api/ai-analysis', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert Media & Information Literacy (MIL) assistant for youth. Keep explanations simple, under 70 words, neutral, and clear.'
-          },
-          {
-            role: 'user',
-            content: `Analyze this content scenario: Headline: "${scenario.content.headline || ''}", Body: "${scenario.content.body}". Why might it look trustworthy? What should be verified? Give one simple MIL tip.`
-          }
-        ],
-        max_tokens: 150
-      })
+        headline: scenario.content.headline || '',
+        body: scenario.content.body,
+        platform: scenario.platform,
+        categoryLabel: scenario.categoryLabel,
+      }),
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error(`AI API returned status ${response.status}`);
+      // Server returned 4xx, 5xx, or fallback indicator -> use local MIL engine
+      return getFallbackAnalysis(scenario);
     }
 
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content || '';
+
+    if (data.fallback || !data.trustworthinessAnalysis) {
+      return getFallbackAnalysis(scenario);
+    }
 
     return {
-      trustworthinessAnalysis: text,
-      verificationAdvice: `Verify credentials, publication date, and primary source corroboration.`,
-      milRecommendation: `Practice the 6-point MIL check before sharing fast.`,
-      source: 'ai'
+      trustworthinessAnalysis: data.trustworthinessAnalysis,
+      verificationAdvice: data.verificationAdvice || 'Verify credentials, publication date, and primary source corroboration.',
+      milRecommendation: data.milRecommendation || 'Practice the 6-point MIL check before sharing fast.',
+      source: 'ai',
     };
   } catch (error) {
-    console.warn('AI API call failed or unavailable. Falling back to local offline MIL analysis engine.', error);
+    // Network offline, timeout, or local dev without serverless api -> seamless fallback
     return getFallbackAnalysis(scenario);
   }
 }
 
+/**
+ * Local Pre-Written MIL Analysis Engine (Offline Fallback)
+ * Ensures 100% application reliability under all network and key conditions.
+ */
 function getFallbackAnalysis(scenario: Scenario): AIServiceResponse {
   return {
     trustworthinessAnalysis: `This ${scenario.platform} scenario uses polished formatting and ${
@@ -65,6 +67,6 @@ function getFallbackAnalysis(scenario: Scenario): AIServiceResponse {
     } which often makes content feel immediately reliable.`,
     verificationAdvice: scenario.explanation,
     milRecommendation: `Check whether the publisher (${scenario.author.name}) is verified by independent research registries or official international monitoring databases.`,
-    source: 'fallback'
+    source: 'fallback',
   };
 }

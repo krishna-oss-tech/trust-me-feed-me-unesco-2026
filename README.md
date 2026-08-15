@@ -184,6 +184,8 @@ $$\text{AccuracyScore} = \left(\frac{\text{CorrectDecisions}}{\text{TotalScenari
 
 ```
 unesco/
+├── api/
+│   └── ai-analysis.ts       # Serverless Vercel Function (Edge AI proxy)
 ├── src/
 │   ├── assets/              # Static media assets
 │   ├── components/          # Reusable UI component modules
@@ -212,7 +214,7 @@ unesco/
 │   │   ├── ProfilePage.tsx
 │   │   └── ScenarioPage.tsx
 │   ├── services/
-│   │   ├── aiService.ts     # AI abstraction with 100% offline fallback
+│   │   ├── aiService.ts     # Client proxy calling /api/ai-analysis with offline fallback
 │   │   └── supabase.ts      # Anonymous session persistence
 │   ├── types/
 │   │   └── index.ts         # TypeScript interface definitions
@@ -264,10 +266,10 @@ The project is pre-configured with `vercel.json` for one-click deployment:
 4. Preset: **Vite**
    - Build Command: `npm run build`
    - Output Directory: `dist`
-5. (Optional) Configure environment variables:
-   - `VITE_AI_API_KEY`: (Optional OpenAI/Gemini API key for real-time AI insight generation)
-   - `VITE_SUPABASE_URL`: (Optional Supabase URL for anonymous analytics)
-   - `VITE_SUPABASE_ANON_KEY`: (Optional Supabase Anon Key)
+5. (Optional) Configure environment variables in Vercel:
+   - `AI_API_KEY`: *(Server-Side secret: OpenAI / compatible API key used by `/api/ai-analysis`)*
+   - `VITE_SUPABASE_URL`: *(Client-Side: Optional Supabase URL for anonymous analytics)*
+   - `VITE_SUPABASE_ANON_KEY`: *(Client-Side: Optional Supabase Anon Key)*
 6. Click **Deploy**!
 
 ---
