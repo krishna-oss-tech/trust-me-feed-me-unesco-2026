@@ -9,9 +9,9 @@ import { CategoryMarquee } from '../components/CategoryMarquee';
 const FLOW_STEPS = [
   {
     tag: '01 · ENCOUNTER',
-    color: '#00F0FF',
-    accentBg: 'rgba(0,240,255,0.08)',
-    accentBorder: 'rgba(0,240,255,0.25)',
+    color: '#38BDF8',
+    accentBg: 'rgba(56,189,248,0.08)',
+    accentBorder: 'rgba(56,189,248,0.25)',
     icon: Bot,
     title: 'Live information streams',
     body: 'Evaluate synthetic AI answers, viral claims, misleading charts, and recycled news the way you actually encounter them.',
@@ -55,9 +55,9 @@ export const LandingPage: React.FC = () => {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold"
+            className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-sky-950/40 border border-sky-500/25 text-sky-300 text-xs font-mono font-semibold"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
             <span>UNESCO YOUTH HACKATHON 2026 &bull; AI &amp; MIL</span>
           </motion.div>
 
@@ -67,7 +67,7 @@ export const LandingPage: React.FC = () => {
             <ScrambleText
               as="span"
               text="FEED ME"
-              className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-blue-500"
             />
           </h1>
 
@@ -84,7 +84,7 @@ export const LandingPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
             <button
               onClick={() => setStep('challenge')}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:brightness-110 active:scale-[0.97] text-slate-950 font-display font-bold text-sm sm:text-base shadow-xl shadow-cyan-500/20 flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 hover:brightness-110 active:scale-[0.97] text-slate-950 font-display font-bold text-sm sm:text-base shadow-xl shadow-sky-500/20 flex items-center justify-center space-x-2 transition-all cursor-pointer"
             >
               <Play className="w-4 h-4 fill-slate-950" />
               <span>START THE EXPERIENCE</span>
@@ -130,7 +130,7 @@ export const LandingPage: React.FC = () => {
         <CategoryMarquee />
       </div>
 
-      {/* ============ UNIFIED FLOW: single narrative, not a duplicated grid ============ */}
+      {/* ============ UNIFIED FLOW ============ */}
       <motion.div
         initial="hidden"
         whileInView="show"
@@ -149,7 +149,7 @@ export const LandingPage: React.FC = () => {
 
         <div className="relative">
           {/* connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-[38px] left-[16.5%] right-[16.5%] h-px bg-gradient-to-r from-cyan-500/40 via-blue-500/40 to-emerald-500/40" />
+          <div className="hidden md:block absolute top-[38px] left-[16.5%] right-[16.5%] h-px bg-gradient-to-r from-sky-500/40 via-blue-500/40 to-emerald-500/40" />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
             {FLOW_STEPS.map((step) => (

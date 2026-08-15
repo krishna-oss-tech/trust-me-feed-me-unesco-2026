@@ -27,12 +27,12 @@ const MainContent: React.FC = () => {
 export function App() {
   return (
     <GameProvider>
-      <div className="min-h-screen flex flex-col bg-[#090D16] text-[#F8FAFC] selection:bg-cyan-500/20 selection:text-cyan-200 relative overflow-hidden font-sans">
+      <div className="min-h-screen flex flex-col bg-[#090D16] text-[#F8FAFC] selection:bg-sky-500/20 selection:text-sky-200 relative overflow-hidden font-sans">
         
         {/* Subtle Ambient Background Gradients */}
-        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-cyan-950/20 via-blue-950/10 to-transparent pointer-events-none blur-3xl z-0" />
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-sky-950/15 via-blue-950/10 to-transparent pointer-events-none blur-3xl z-0" />
         <div className="fixed -top-40 right-10 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl pointer-events-none z-0" />
-        <div className="fixed -bottom-40 left-10 w-96 h-96 bg-cyan-900/10 rounded-full blur-3xl pointer-events-none z-0" />
+        <div className="fixed -bottom-40 left-10 w-96 h-96 bg-sky-900/10 rounded-full blur-3xl pointer-events-none z-0" />
 
         <Navbar />
         <MainContent />

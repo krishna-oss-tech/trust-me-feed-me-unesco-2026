@@ -8,8 +8,8 @@ export const Footer: React.FC = () => {
         
         {/* Left: Project Details */}
         <div className="flex items-center space-x-3 text-center md:text-left">
-          <div className="w-7 h-7 rounded-lg bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center shrink-0">
-            <Shield className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="w-7 h-7 rounded-lg bg-sky-950/50 border border-sky-500/30 flex items-center justify-center shrink-0">
+            <Shield className="w-3.5 h-3.5 text-sky-400" />
           </div>
           <div>
             <p className="text-slate-200 font-display font-bold tracking-tight text-xs sm:text-sm">
@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
 
         {/* Center: Educational Disclaimer */}
         <div className="flex items-center space-x-2.5 bg-slate-900/60 px-3.5 py-2 rounded-xl border border-white/[0.06] text-center max-w-xl">
-          <Info className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+          <Info className="w-3.5 h-3.5 text-sky-400 shrink-0" />
           <p className="text-[11px] text-slate-400 leading-snug">
             <strong className="text-slate-200 font-semibold">Educational Simulation:</strong> Explores MIL critical evaluation habits. Does not reproduce proprietary platform algorithms.
           </p>

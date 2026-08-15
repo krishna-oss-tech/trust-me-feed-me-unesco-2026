@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from '../context/GameContext';
-import { CheckCircle2, Search, XCircle, AlertCircle, Play, ShieldAlert, Sparkles, HelpCircle, Layers, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, Search, XCircle, AlertCircle, Play, HelpCircle, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export const HowItWorksPage: React.FC = () => {
   const { setStep } = useGame();
@@ -12,15 +12,15 @@ export const HowItWorksPage: React.FC = () => {
       <div className="space-y-4">
         <button
           onClick={() => setStep('landing')}
-          className="inline-flex items-center space-x-1.5 text-xs font-mono text-slate-400 hover:text-cyan-300 transition-colors cursor-pointer"
+          className="inline-flex items-center space-x-1.5 text-xs font-mono text-slate-400 hover:text-sky-300 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>BACK TO HOME</span>
         </button>
 
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold">
-            <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-sky-950/40 border border-sky-500/25 text-sky-300 text-xs font-mono font-semibold">
+            <HelpCircle className="w-3.5 h-3.5 text-sky-400" />
             <span>METHODOLOGY & USER JOURNEY</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-display font-black text-white tracking-tight">
@@ -32,43 +32,48 @@ export const HowItWorksPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 3 Step Flow */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Connected 3-Step Flow Path */}
+      <div className="relative">
+        {/* Connection line behind cards for large screens */}
+        <div className="hidden md:block absolute top-1/2 left-10 right-10 h-0.5 bg-gradient-to-r from-sky-500/20 via-blue-500/20 to-emerald-500/20 -translate-y-6 z-0" />
         
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-3 hover:border-cyan-500/30 transition-all">
-          <div className="w-9 h-9 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center font-mono font-bold text-xs text-cyan-400">
-            01
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+          
+          <div className="surface-elevated p-6 rounded-2xl border border-white/[0.08] space-y-3.5 hover:border-sky-500/30 transition-all shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-sky-950/60 border border-sky-500/30 flex items-center justify-center font-mono font-bold text-xs text-sky-400 shadow-inner">
+              01
+            </div>
+            <h3 className="font-display font-bold text-lg text-white">QUESTION</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Resist immediate acceptance. Understand why confident phrasing, high engagement, or algorithmic authority triggers fast trust.
+            </p>
           </div>
-          <h3 className="font-display font-bold text-base text-white">QUESTION</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Resist immediate acceptance. Understand why confident phrasing, high engagement, or algorithmic authority triggers fast trust.
-          </p>
-        </div>
 
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-3 hover:border-blue-500/30 transition-all">
-          <div className="w-9 h-9 rounded-xl bg-blue-950/60 border border-blue-500/30 flex items-center justify-center font-mono font-bold text-xs text-blue-400">
-            02
+          <div className="surface-elevated p-6 rounded-2xl border border-white/[0.08] space-y-3.5 hover:border-blue-500/30 transition-all shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-blue-950/60 border border-blue-500/30 flex items-center justify-center font-mono font-bold text-xs text-blue-400 shadow-inner">
+              02
+            </div>
+            <h3 className="font-display font-bold text-lg text-white">VERIFY</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Execute the 6-point UNESCO MIL framework: Source, Date, Evidence, Context, Media Authenticity, and Institutional Consensus.
+            </p>
           </div>
-          <h3 className="font-display font-bold text-base text-white">VERIFY</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Execute the 6-point UNESCO MIL framework: Source, Date, Evidence, Context, Media Authenticity, and Institutional Consensus.
-          </p>
-        </div>
 
-        <div className="surface-card p-6 rounded-2xl border border-white/[0.06] space-y-3 hover:border-emerald-500/30 transition-all">
-          <div className="w-9 h-9 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center font-mono font-bold text-xs text-emerald-400">
-            03
+          <div className="surface-elevated p-6 rounded-2xl border border-white/[0.08] space-y-3.5 hover:border-emerald-500/30 transition-all shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center font-mono font-bold text-xs text-emerald-400 shadow-inner">
+              03
+            </div>
+            <h3 className="font-display font-bold text-lg text-white">REFLECT</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Discover your behavioral profile report and watch how your choices construct your simulated algorithmic information environment.
+            </p>
           </div>
-          <h3 className="font-display font-bold text-base text-white">REFLECT</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Discover your behavioral profile report and watch how your choices construct your simulated algorithmic information environment.
-          </p>
-        </div>
 
+        </div>
       </div>
 
       {/* 3 Natural Decisions Overview */}
-      <div className="surface-elevated p-6 sm:p-8 rounded-3xl border border-white/[0.08] space-y-6">
+      <div className="surface-elevated p-6 sm:p-8 rounded-3xl border border-white/[0.08] space-y-6 shadow-xl">
         <div className="text-center space-y-1">
           <h3 className="text-sm font-mono font-bold text-slate-200 uppercase tracking-wider">
             For each scenario, make your natural real-world decision:
@@ -113,32 +118,26 @@ export const HowItWorksPage: React.FC = () => {
         </div>
 
         {/* User Journey Highlights */}
-        <div className="pt-4 border-t border-white/[0.06] space-y-3 text-xs sm:text-sm text-slate-300">
-          <div className="flex items-start space-x-3">
-            <div className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-500/30 text-cyan-400 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 mt-0.5">
-              1
-            </div>
-            <span>
-              <strong className="text-white">Why did you choose this?</strong> On select scenarios, reflect on cognitive triggers (synthetic confidence, like counts, speed, emotion).
-            </span>
+        <div className="pt-4 border-t border-white/[0.06] grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-slate-300">
+          <div className="p-4 rounded-xl surface-card border border-white/[0.04] space-y-1.5">
+            <span className="text-sky-400 font-mono font-bold text-xs">A · WHY YOU CHOSE IT</span>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              On select scenarios, reflect on cognitive triggers (synthetic confidence, like counts, speed, emotional pull).
+            </p>
           </div>
 
-          <div className="flex items-start space-x-3">
-            <div className="w-5 h-5 rounded-full bg-blue-950 border border-blue-500/30 text-blue-400 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 mt-0.5">
-              2
-            </div>
-            <span>
-              <strong className="text-white">Information Behaviour Profile:</strong> Receive an educational radar chart evaluating Fast Trust, Verification Habits, Social Proof Sensitivity, and AI Openness.
-            </span>
+          <div className="p-4 rounded-xl surface-card border border-white/[0.04] space-y-1.5">
+            <span className="text-blue-400 font-mono font-bold text-xs">B · BEHAVIOURAL PROFILE</span>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Receive a 6-axis radar report evaluating Fast Trust, Verification Habits, Social Proof, and AI Openness.
+            </p>
           </div>
 
-          <div className="flex items-start space-x-3">
-            <div className="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-mono font-bold text-[10px] shrink-0 mt-0.5">
-              3
-            </div>
-            <span>
-              <strong className="text-white">Simulated Recommendation Feed:</strong> Watch how your choices actively generate a personalized simulated feed tailored to your interaction pattern.
-            </span>
+          <div className="p-4 rounded-xl surface-card border border-white/[0.04] space-y-1.5">
+            <span className="text-emerald-400 font-mono font-bold text-xs">C · SIMULATED FEED</span>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Experience the direct algorithmic consequence: a personalized stream reflecting your interaction habits.
+            </p>
           </div>
         </div>
 
@@ -146,7 +145,7 @@ export const HowItWorksPage: React.FC = () => {
 
       {/* Mandatory UNESCO Disclaimer */}
       <div className="p-4 rounded-2xl bg-slate-900/80 border border-white/[0.08] flex items-start space-x-3 text-xs text-slate-400">
-        <AlertCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+        <AlertCircle className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
         <p className="leading-relaxed">
           <strong className="text-slate-200">Educational Simulation:</strong> Developed for the UNESCO Youth Hackathon 2026. Designed for MIL critical reflection; does not reproduce proprietary commercial platform algorithms.
         </p>
@@ -156,10 +155,11 @@ export const HowItWorksPage: React.FC = () => {
       <div className="flex justify-center pt-2">
         <button
           onClick={() => setStep('challenge')}
-          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-display font-bold text-sm shadow-xl shadow-cyan-500/20 flex items-center space-x-2 transition-all hover:scale-105 cursor-pointer"
+          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 hover:brightness-110 active:scale-[0.97] text-slate-950 font-display font-bold text-sm shadow-xl shadow-sky-500/20 flex items-center space-x-2 transition-all cursor-pointer"
         >
           <Play className="w-4 h-4 fill-slate-950" />
           <span>START THE EXPERIENCE</span>
+          <ArrowRight className="w-4 h-4 ml-1" />
         </button>
       </div>
 

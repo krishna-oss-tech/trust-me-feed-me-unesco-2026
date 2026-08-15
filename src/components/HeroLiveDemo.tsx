@@ -65,7 +65,7 @@ export const HeroLiveDemo: React.FC = () => {
   return (
     <div className="w-full max-w-sm mx-auto lg:mx-0">
       <div className="flex items-center gap-2 mb-3 text-[10px] font-mono uppercase tracking-wider text-slate-500">
-        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
         <span>Live simulation preview</span>
       </div>
 
@@ -144,7 +144,7 @@ export const HeroLiveDemo: React.FC = () => {
             <span
               key={i}
               className={`h-1 rounded-full transition-all duration-300 ${
-                i === index ? 'w-4 bg-cyan-400' : 'w-1.5 bg-white/15'
+                i === index ? 'w-4 bg-sky-400' : 'w-1.5 bg-white/15'
               }`}
             />
           ))}
