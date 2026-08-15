@@ -185,7 +185,8 @@ $$\text{AccuracyScore} = \left(\frac{\text{CorrectDecisions}}{\text{TotalScenari
 ```
 unesco/
 ├── api/
-│   └── ai-analysis.ts       # Serverless Vercel Function (Edge AI proxy)
+│   ├── ai-analysis.ts       # Serverless Vercel Function (Edge AI proxy)
+│   └── verify-claim.ts      # Serverless Vercel Function (Tavily Search + AI Synthesis)
 ├── src/
 │   ├── assets/              # Static media assets
 │   ├── components/          # Reusable UI component modules
@@ -194,7 +195,8 @@ unesco/
 │   │   ├── profile/         # ProfileCard.tsx, RadarChart.tsx
 │   │   ├── ActionButtons.tsx# Interactive Trust/Verify/Reject buttons
 │   │   ├── Footer.tsx       # UNESCO disclaimers & keyboard shortcuts
-│   │   ├── Navbar.tsx       # Mode toggles & brand header
+│   │   ├── LiveClaimModal.tsx # Real-time Tavily-backed claim checker UI
+│   │   ├── Navbar.tsx       # Mode toggles, Live check button & brand header
 │   │   ├── ReasonModal.tsx  # "Why did you choose this?" reflection
 │   │   ├── ScenarioCard.tsx # Rich scenario card with media & metrics
 │   │   └── VerificationPanel.tsx # 6-Point MIL audit interactive tool
@@ -215,6 +217,7 @@ unesco/
 │   │   └── ScenarioPage.tsx
 │   ├── services/
 │   │   ├── aiService.ts     # Client proxy calling /api/ai-analysis with offline fallback
+│   │   ├── liveVerifyService.ts # Client service calling /api/verify-claim
 │   │   └── supabase.ts      # Anonymous session persistence
 │   ├── types/
 │   │   └── index.ts         # TypeScript interface definitions
@@ -267,7 +270,8 @@ The project is pre-configured with `vercel.json` for one-click deployment:
    - Build Command: `npm run build`
    - Output Directory: `dist`
 5. (Optional) Configure environment variables in Vercel:
-   - `AI_API_KEY`: *(Server-Side secret: OpenAI / compatible API key used by `/api/ai-analysis`)*
+   - `AI_API_KEY`: *(Server-Side secret: OpenAI / compatible API key used by `/api/ai-analysis` & `/api/verify-claim`)*
+   - `TAVILY_API_KEY`: *(Server-Side secret: Tavily Search API key used by `/api/verify-claim`)*
    - `VITE_SUPABASE_URL`: *(Client-Side: Optional Supabase URL for anonymous analytics)*
    - `VITE_SUPABASE_ANON_KEY`: *(Client-Side: Optional Supabase Anon Key)*
 6. Click **Deploy**!

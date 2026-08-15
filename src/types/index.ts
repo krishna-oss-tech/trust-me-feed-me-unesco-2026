@@ -130,3 +130,30 @@ export interface AIServiceResponse {
   milRecommendation: string;
   source: 'ai' | 'fallback';
 }
+
+// Live Claim Verification MVP Types
+export type LiveClaimVerdict = 'SUPPORTED' | 'CONTRADICTED' | 'MIXED' | 'INSUFFICIENT_EVIDENCE';
+export type LiveClaimConfidence = 'HIGH' | 'MEDIUM' | 'LOW';
+
+export interface LiveClaimSource {
+  title: string;
+  url: string;
+  domain: string;
+  snippet: string;
+  publishedDate?: string;
+}
+
+export interface LiveClaimVerificationResult {
+  verdict: LiveClaimVerdict;
+  confidence: LiveClaimConfidence;
+  source: string;
+  date: string;
+  evidence: string;
+  context: string;
+  media: string;
+  consensus: string;
+  limitations: string;
+  sources: LiveClaimSource[];
+  isUnavailable?: boolean;
+  statusMessage?: string;
+}
