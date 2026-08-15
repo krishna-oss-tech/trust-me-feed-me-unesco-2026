@@ -12,27 +12,67 @@ export const Navbar: React.FC = () => {
       <header className="sticky top-0 z-40 w-full bg-[#090D16]/85 backdrop-blur-xl border-b border-white/[0.07] transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
-          {/* Brand & UNESCO Badge */}
+          {/* Brand & UNESCO Credibility Badge */}
           <div 
-            className="flex items-center space-x-3 cursor-pointer group" 
+            className="flex items-center space-x-3.5 cursor-pointer group select-none" 
             onClick={() => setStep('landing')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setStep('landing'); }}
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-500/20 to-blue-500/20 border border-sky-500/30 flex items-center justify-center shadow-lg shadow-sky-500/10 group-hover:border-sky-400 transition-all">
-              <ShieldCheck className="w-4 h-4 text-sky-400" />
+            {/* Minimalist Shield + Eye Logo */}
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#090F1F] border border-sky-500/35 flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.15)] group-hover:border-sky-400 group-hover:shadow-[0_0_18px_rgba(56,189,248,0.3)] transition-all duration-200 shrink-0">
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                className="w-5 h-5 sm:w-[22px] sm:h-[22px]"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="Trust Me Feed Me Logo"
+              >
+                {/* Minimal Shield Geometry */}
+                <path 
+                  d="M12 2.5L4.5 5.5V11C4.5 15.8 7.7 19.9 12 21.2C16.3 19.9 19.5 15.8 19.5 11V5.5L12 2.5Z" 
+                  stroke="#38BDF8" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                />
+                {/* Perception Eye Geometry */}
+                <path 
+                  d="M7.5 12C8.7 9.8 10.3 8.7 12 8.7C13.7 8.7 15.3 9.8 16.5 12C15.3 14.2 13.7 15.3 12 15.3C10.3 15.3 8.7 14.2 7.5 12Z" 
+                  stroke="#38BDF8" 
+                  strokeWidth="1.35" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                />
+                {/* Verification Pupil / Focus Core */}
+                <circle 
+                  cx="12" 
+                  cy="12" 
+                  r="1.5" 
+                  fill="#38BDF8" 
+                />
+              </svg>
             </div>
-            <div>
-              <div className="flex items-center space-x-2.5">
-                <span className="font-display font-bold tracking-tight text-white text-sm sm:text-base group-hover:text-sky-300 transition-colors">
-                  TRUST ME, FEED ME
+
+            {/* Wordmark & Editorial Tagline */}
+            <div className="flex flex-col justify-center">
+              <div className="flex items-center gap-2.5">
+                <span className="font-display font-bold text-sm sm:text-base tracking-tight leading-none">
+                  <span className="text-slate-100 group-hover:text-white transition-colors">TRUST ME</span>
+                  <span className="text-slate-500 font-normal">, </span>
+                  <span className="text-sky-400 group-hover:text-sky-300 transition-colors">FEED ME</span>
                 </span>
-                <span className="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-950/60 text-sky-300 border border-sky-500/30">
-                  <Award className="w-2.5 h-2.5 mr-1 text-sky-400" /> UNESCO MIL 2026
+                
+                {/* Refined Credibility Badge */}
+                <span className="hidden md:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-900/80 text-slate-400 border border-slate-700/50 shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                  <span className="font-semibold text-slate-300 tracking-wide">UNESCO</span>
+                  <span className="text-slate-600">/</span>
+                  <span className="text-sky-400 font-medium">MIL 2026</span>
                 </span>
               </div>
-              <p className="text-[10px] font-mono text-slate-400 hidden sm:block">
+              <p className="text-[10px] font-mono text-slate-400/90 tracking-normal mt-0.5 hidden sm:block leading-tight">
                 What you trust shapes what you see
               </p>
             </div>
