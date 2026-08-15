@@ -1,12 +1,14 @@
 /**
  * Serverless Vercel Function: /api/verify-claim
  * 
- * Secure real-time claim verification MVP using Tavily Web Search + Server-side AI synthesis.
- * Never exposes TAVILY_API_KEY or AI_API_KEY to the browser.
+ * High-performance real-time claim verification pipeline:
+ * 1. Tavily web search (fast 3.5s budget, top 3-4 concise sources)
+ * 2. Server-side AI synthesis (fast json_object mode, concise 280 token budget)
+ * 3. Unified 8.5s request execution window with safe structured fallback
  */
 
 export const config = {
-  runtime: 'edge', // Fast edge runtime for low-latency search + AI synthesis
+  runtime: 'edge',
 };
 
 interface VerifyClaimPayload {
@@ -18,10 +20,11 @@ interface TavilySearchResult {
   url?: string;
   content?: string;
   published_date?: string;
-  score?: number;
 }
 
 export default async function handler(req: Request): Promise<Response> {
+  const startTime = Date.now();
+
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
@@ -59,8 +62,9 @@ export default async function handler(req: Request): Promise<Response> {
     const tavilyApiKey = process.env.TAVILY_API_KEY;
     const aiApiKey = process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY;
 
-    // If Tavily key is not configured, return clear unavailable state without crashing
+    // If Tavily key is unconfigured, return clear structured status
     if (!tavilyApiKey) {
+      console.warn('[verify-claim] TAVILY_API_KEY is not configured on server.');
       return new Response(
         JSON.stringify({
           verdict: 'INSUFFICIENT_EVIDENCE',
@@ -83,9 +87,10 @@ export default async function handler(req: Request): Promise<Response> {
       );
     }
 
-    // Step 1: Execute Tavily Web Search with 8s timeout
+    // Step 1: Tavily Search with 3.5s budget
+    const tavilyStart = Date.now();
     const tavilyController = new AbortController();
-    const tavilyTimeoutId = setTimeout(() => tavilyController.abort(), 8000);
+    const tavilyTimeoutId = setTimeout(() => tavilyController.abort(), 3500);
 
     let rawSources: TavilySearchResult[] = [];
     try {
@@ -98,7 +103,7 @@ export default async function handler(req: Request): Promise<Response> {
           api_key: tavilyApiKey,
           query: claim,
           search_depth: 'basic',
-          max_results: 5,
+          max_results: 4,
           include_answer: false,
           include_raw_content: false,
         }),
@@ -109,14 +114,18 @@ export default async function handler(req: Request): Promise<Response> {
 
       if (tavilyRes.ok) {
         const tavilyData = await tavilyRes.json();
-        rawSources = (tavilyData.results || []).slice(0, 5);
+        rawSources = (tavilyData.results || []).slice(0, 4);
+      } else {
+        console.warn(`[verify-claim] Tavily API returned status ${tavilyRes.status}`);
       }
-    } catch {
+    } catch (tavilyErr: any) {
       clearTimeout(tavilyTimeoutId);
-      // Tavily call timed out or failed
+      console.warn(`[verify-claim] Tavily fetch error (${tavilyErr?.name || 'unknown'})`);
     }
 
-    // Format sanitized source objects
+    const tavilyDuration = Date.now() - tavilyStart;
+
+    // Sanitize and format compact sources (top 3-4, concise snippets)
     const sources = rawSources.map((item) => {
       let domain = 'web source';
       try {
@@ -128,20 +137,22 @@ export default async function handler(req: Request): Promise<Response> {
       }
 
       return {
-        title: (item.title || domain).slice(0, 150),
+        title: (item.title || domain).slice(0, 100),
         url: item.url || '',
         domain,
-        snippet: (item.content || '').slice(0, 300),
+        snippet: (item.content || '').slice(0, 160),
         publishedDate: item.published_date,
       };
     });
 
+    // If zero sources found
     if (sources.length === 0) {
+      console.log(`[verify-claim] 0 sources found in ${tavilyDuration}ms`);
       return new Response(
         JSON.stringify({
           verdict: 'INSUFFICIENT_EVIDENCE',
           confidence: 'LOW',
-          source: 'No authoritative public indexed sources found for this query.',
+          source: 'No indexed sources matched this query.',
           date: 'N/A',
           evidence: 'Live search returned zero matching indexed web results for this specific wording.',
           context: 'The claim may be too recent, highly localized, or framed ambiguously.',
@@ -159,19 +170,20 @@ export default async function handler(req: Request): Promise<Response> {
       );
     }
 
-    // If AI key is missing, return sources with analysis unavailable state
+    // If AI key is missing, return sources with search-only status
     if (!aiApiKey) {
+      console.warn('[verify-claim] AI_API_KEY is not configured on server.');
       return new Response(
         JSON.stringify({
           verdict: 'INSUFFICIENT_EVIDENCE',
           confidence: 'MEDIUM',
           source: `Retrieved ${sources.length} sources from live web index.`,
           date: 'Recent web indexed entries.',
-          evidence: 'Search results retrieved successfully, but AI synthesis key is not configured.',
+          evidence: 'Search results retrieved successfully, but AI synthesis key is not configured on server.',
           context: 'Review the attached direct source links below.',
           media: 'Not applicable — no image or video was supplied',
           consensus: 'Manual review of the attached links is advised.',
-          limitations: 'AI synthesis engine not configured.',
+          limitations: 'AI synthesis engine unconfigured.',
           sources,
           isUnavailable: false,
           statusMessage: 'Web search succeeded. AI synthesis engine unconfigured.',
@@ -183,16 +195,20 @@ export default async function handler(req: Request): Promise<Response> {
       );
     }
 
-    // Step 2: Server-side AI Synthesis using OpenAI / compatible endpoint
+    // Step 2: AI Synthesis with JSON mode and remaining time budget (max 5s)
+    const elapsedBeforeAi = Date.now() - startTime;
+    const aiBudget = Math.max(3000, Math.min(5000, 8500 - elapsedBeforeAi));
+
     const sourcesSummary = sources
       .map(
         (s, idx) =>
-          `[Source ${idx + 1}] Title: ${s.title} | Domain: ${s.domain} | URL: ${s.url}\nExcerpt: ${s.snippet}`
+          `[Source ${idx + 1}] (${s.domain}): ${s.title} — "${s.snippet}"`
       )
-      .join('\n\n');
+      .join('\n');
 
+    const aiStart = Date.now();
     const aiController = new AbortController();
-    const aiTimeoutId = setTimeout(() => aiController.abort(), 9000);
+    const aiTimeoutId = setTimeout(() => aiController.abort(), aiBudget);
 
     try {
       const aiRes = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -203,37 +219,34 @@ export default async function handler(req: Request): Promise<Response> {
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
+          response_format: { type: 'json_object' },
           messages: [
             {
               role: 'system',
               content:
-                'You are an expert UNESCO Media and Information Literacy (MIL) verification analyst. Reason strictly and primarily from the provided search sources. Do not invent facts or citations. If evidence contradicts the claim, choose CONTRADICTED. If evidence supports it, choose SUPPORTED. If conflicting or nuanced, choose MIXED. If sources are insufficient, choose INSUFFICIENT_EVIDENCE. Respond strictly in valid JSON matching the requested schema with no markdown formatting.',
+                'You are a UNESCO Media & Information Literacy (MIL) verification assistant. Evaluate the user claim strictly against the provided search sources. Keep each assessment field concise (1-2 sentences). Respond with a JSON object containing keys: verdict (SUPPORTED|CONTRADICTED|MIXED|INSUFFICIENT_EVIDENCE), confidence (HIGH|MEDIUM|LOW), source, date, evidence, context, media, consensus, limitations.',
             },
             {
               role: 'user',
-              content: `Claim to evaluate: "${claim}"\n\nRetrieved Search Sources:\n${sourcesSummary}\n\nReturn strict JSON with exact keys:\n{\n  "verdict": "SUPPORTED" | "CONTRADICTED" | "MIXED" | "INSUFFICIENT_EVIDENCE",\n  "confidence": "HIGH" | "MEDIUM" | "LOW",\n  "source": "concise assessment of source reliability and publisher credibility",\n  "date": "concise assessment of timeliness and publication dates",\n  "evidence": "concise factual evidence assessment strictly from sources",\n  "context": "concise analysis of missing context or deceptive framing",\n  "media": "Not applicable — no image or video was supplied",\n  "consensus": "concise summary of scientific/institutional consensus from sources",\n  "limitations": "concise note on any evidence gaps or search limitations"\n}`,
+              content: `Claim: "${claim}"\n\nSearch Results:\n${sourcesSummary}\n\nReturn structured MIL evaluation JSON. For media, use "Not applicable — no image or video was supplied".`,
             },
           ],
-          max_tokens: 450,
-          temperature: 0.2,
+          max_tokens: 280,
+          temperature: 0.1,
         }),
         signal: aiController.signal,
       });
 
       clearTimeout(aiTimeoutId);
+      const aiDuration = Date.now() - aiStart;
 
       if (!aiRes.ok) {
+        console.warn(`[verify-claim] OpenAI returned status ${aiRes.status} in ${aiDuration}ms`);
         throw new Error(`AI API returned status ${aiRes.status}`);
       }
 
       const aiData = await aiRes.json();
-      let rawText = (aiData.choices?.[0]?.message?.content || '').trim();
-
-      // Clean markdown codeblocks if model wrapped output in ```json
-      if (rawText.startsWith('```')) {
-        rawText = rawText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
-      }
-
+      const rawText = aiData.choices?.[0]?.message?.content?.trim() || '{}';
       const parsed = JSON.parse(rawText);
 
       // Validate verdict
@@ -243,17 +256,20 @@ export default async function handler(req: Request): Promise<Response> {
       const validConfidences = ['HIGH', 'MEDIUM', 'LOW'];
       const confidence = validConfidences.includes(parsed.confidence) ? parsed.confidence : 'MEDIUM';
 
+      const totalTime = Date.now() - startTime;
+      console.log(`[verify-claim] SUCCESS total=${totalTime}ms (tavily=${tavilyDuration}ms, ai=${aiDuration}ms) verdict=${verdict}`);
+
       return new Response(
         JSON.stringify({
           verdict,
           confidence,
-          source: parsed.source || 'Assessed based on retrieved domain records.',
-          date: parsed.date || 'Assessed from indexed timestamps.',
-          evidence: parsed.evidence || 'Synthesized from search excerpts.',
-          context: parsed.context || 'Evaluated for missing contextual details.',
+          source: parsed.source || `Evaluated from ${sources.length} indexed domain records.`,
+          date: parsed.date || 'Evaluated from indexed source timestamps.',
+          evidence: parsed.evidence || 'Synthesized from retrieved search evidence.',
+          context: parsed.context || 'Context evaluated against live reporting.',
           media: parsed.media || 'Not applicable — no image or video was supplied',
-          consensus: parsed.consensus || 'Assessed across multi-source coverage.',
-          limitations: parsed.limitations || 'Limited to open indexed public web sources.',
+          consensus: parsed.consensus || 'Consensus determined across multi-source coverage.',
+          limitations: parsed.limitations || 'Analysis limited to publicly indexed web sources.',
           sources,
           isUnavailable: false,
         }),
@@ -265,23 +281,26 @@ export default async function handler(req: Request): Promise<Response> {
           },
         }
       );
-    } catch {
+    } catch (aiErr: any) {
       clearTimeout(aiTimeoutId);
-      // AI synthesis failed -> return sources + fallback summary
+      const aiDuration = Date.now() - aiStart;
+      console.warn(`[verify-claim] AI synthesis failed/timed-out (${aiErr?.name || 'error'}) in ${aiDuration}ms. Returning sources.`);
+
+      // Fast fallback returning live sources so user still sees the evidence
       return new Response(
         JSON.stringify({
           verdict: 'INSUFFICIENT_EVIDENCE',
           confidence: 'LOW',
-          source: `Retrieved ${sources.length} sources from live web index.`,
-          date: 'Recent web indexed entries.',
-          evidence: 'Search completed successfully, but AI synthesis encountered an error.',
-          context: 'Inspect the primary source URLs below.',
+          source: `Retrieved ${sources.length} live web sources.`,
+          date: 'Recent web entries.',
+          evidence: 'Live sources retrieved successfully. Automated synthesis timed out.',
+          context: 'Inspect the primary sources attached below.',
           media: 'Not applicable — no image or video was supplied',
-          consensus: 'Review external source links directly for consensus.',
-          limitations: 'AI synthesis service unavailable.',
+          consensus: 'Review direct citations for multi-source confirmation.',
+          limitations: 'AI synthesis timed out; primary sources provided directly.',
           sources,
           isUnavailable: false,
-          statusMessage: 'Search completed. AI synthesis timed out or failed.',
+          statusMessage: 'Sources retrieved. Direct links available below.',
         }),
         {
           status: 200,
@@ -289,7 +308,8 @@ export default async function handler(req: Request): Promise<Response> {
         }
       );
     }
-  } catch {
+  } catch (err: any) {
+    console.error('[verify-claim] Top-level handler error', err);
     return new Response(
       JSON.stringify({
         error: 'Internal server error processing live claim check',

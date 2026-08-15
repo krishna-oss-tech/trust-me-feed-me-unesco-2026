@@ -14,7 +14,7 @@ export async function verifyLiveClaim(claim: string): Promise<LiveClaimVerificat
   }
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 12000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
     const response = await fetch('/api/verify-claim', {
